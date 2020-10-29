@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HELLO</title>
+</head>
+<body>
+     <label for="intTime">Enter Interval Time:</label>
+     <input type="text" id="intTime" name="intTime">
+     <button onclick="myVar=myFunction()">Start</button>
+     <button onclick="delayTime()">Add 10 Second</button>
+     <button onclick="stop()">NEXT</button>
+
+     <h1>Hello!</h1>
+     <p id="demo"></p>
+    <h2 id="name">Name</h2>
+    <img id="photo" src="https://www.nobleflash.com/images/run-batman-run-p1.jpg">
+</body>
+</html>
+
+<script>
+    var po = '{{ posts }}';
+    po = po.replace(/&#39;/g,'"')
+    po = po.replace(/amp;/g,'')
+    var data = JSON.parse(po);
+    var arr = [];
+    var sleepTime = document.getElementById("intTime").value
+    var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
+    var now = new Date().getTime();
+    var callFun = false;
+    let id = null;
+
+
+    while(arr.length < data.length){
+        var r = Math.floor(Math.random() * data.length)+0;
+        if(arr.indexOf(r) === -1) arr.push(r);
+    }
+
+    function sleep(ms) {
+        let id;
+
+        const start = () => new Promise(resolve => {
+            if (id === -1) {
+                throw new Error('Timer already aborted');
+            }
+
+            id = setTimeout(resolve, ms);
+            });
+
+        const abort = () => {
+            if (id !== -1 || id === undefined) {
+            console.log("Inside abort!!!!")
+                clearTimeout(id);
+                id = -1;
+            }
+        }
+
+        return {
+            start, abort
+            }
+    }
+
+    async function stop() {
+        console.log("I am here!")
+        if(id){
+            clearTimeout(id);
+        }
+    }
+
+
+    async function delayTime(){
+        callFun = true;
+    }
+
+    async function myFunction() {
+        for(var i=0; i < arr.length; i++){
+            var indVal = arr[i];
+            console.log(data[indVal][1]);
+            document.getElementById("photo").src = data[indVal][1]
+            document.getElementById("name").innerHTML = data[indVal][0]
+            var sleepTime = document.getElementById("intTime").value
+            myime = sleepTime * 1000;
+            console.log(myime,"hiiiiiiii");
+            var x = sleep(myime);
+            await sleep(myime).start();
+            sleep(myime).abort();
+            if (Boolean(callFun)){
+                await sleep(10000).start();
+                callFun = false;
+            }
+            console.log("let's move on!nnnn")
+       }
+       document.getElementById("photo").src = "https://www.kentucky.com/latest-news/8kdva2/picture227088284/alternates/LANDSCAPE_1140/Capture.PNG"
+       document.getElementById("name").innerHTML = "Back to BatCave!! Let's write some code!!!"
+    }
+
+</script>
+
